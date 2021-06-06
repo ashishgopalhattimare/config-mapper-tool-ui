@@ -68,7 +68,7 @@ export class CodemirrorService {
     this._breadcrumbEditorLine = line;
   }
 
-  updateCodeMirrorVisual(profileData: ProfileDataTO[], propertyList: any, jsonObject: any): void {
+  updateCodeMirrorVisual(profileData: ProfileDataTO[], propertyList: any[], jsonObject: any): void {
 
     const parent = document.getElementById('display-aggregate');
     const lineElements = parent?.getElementsByClassName('CodeMirror-linenumber CodeMirror-gutter-elt');
@@ -95,12 +95,10 @@ export class CodemirrorService {
 
       const profileColorMap = new Map(profileData.map((prof, index) => [prof.file.name, prof.color.color]));
 
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < propertyList.length; ++i) {
-        const prop = propertyList[i];
+      propertyList.forEach(prop => {
         const lineNumber = profileMapper.get(prop.property);
         this.updateColor(lineElements[lineNumber], profileColorMap.get(prop.owner));
-      }
+      });
 
       profileData.forEach((profile, index) => {
         this.updateColor(document.getElementById(`side-bar-${index}`), profile.color.color);
@@ -277,12 +275,10 @@ export class CodemirrorService {
 
   yamlLineReaderInArray(path: string, root: any,  profileMapper: any, config: CodemirrorReader): void {
 
-    const parentIndex = this.currentLineInEditor;
     for (const pro of Object.keys(root)) {
       const val = root[pro];
       const newPath = this.generatePropertyPath(path, pro);
 
-      profileMapper.set(path, parentIndex);
       switch (this.propertyType(val)) {
         case 'primitive': {
           this.lineToPropertyBreadcrumbMap.set(this.currentLineInEditor, `${newPath}.${val}`);
