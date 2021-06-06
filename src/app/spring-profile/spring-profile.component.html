@@ -18,8 +18,9 @@
           {{editor}} Merger
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <button class="dropdown-item" (click)="changeEditor('JSON')">JSON</button>
-          <button class="dropdown-item" (click)="changeEditor('YAML')">YAML</button>
+          <button class="dropdown-item" (click)="changeEditor(editorType.name)" *ngFor="let editorType of editorTypeList">
+            {{editorType.title}}
+          </button>
         </div>
       </div>
 

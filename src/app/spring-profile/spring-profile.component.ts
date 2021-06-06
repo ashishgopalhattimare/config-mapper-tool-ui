@@ -22,6 +22,7 @@ import {ColorProviderService} from '../shared/color-provider/color-provider.serv
 import {MatDrawer} from '@angular/material/sidenav';
 import {alertAnimation, dropAnimation, fileAnimation} from '../shared/animation/animation';
 import {CodeEditor} from '../shared/codemirror/codemirror.config';
+import {EditorType} from '../shared/models/EditorType';
 
 @Component({
   selector: 'app-spring-profile',
@@ -66,6 +67,11 @@ export class SpringProfileComponent implements OnInit {
   private profilesSet = new Set();
   private profiles: ProfileDataTO[] = [];
   private profileIndex = -1;
+
+  private _editorTypeList: EditorType[] = [
+    new EditorType('JSON', 'JSON'),
+    new EditorType('YAML', 'YAML (beta)'),
+  ]
 
   SUGGESTED_LIST: string[] = [];
 
@@ -285,5 +291,9 @@ export class SpringProfileComponent implements OnInit {
   }
   get editor(): string {
     return this.codemirrorService.editor;
+  }
+
+  get editorTypeList(): any {
+    return this._editorTypeList;
   }
 }
