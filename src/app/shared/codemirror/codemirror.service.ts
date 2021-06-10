@@ -20,6 +20,11 @@ export class CodemirrorService {
   private _content = '';
   private _editor: CodeEditor = CodeEditor.JSON;
 
+  private _profileData: ProfileDataTO[] = [];
+  private _propertyList: any[] = [];
+  private _profileMapper: any = null;
+  private _lineToDivMapper = new Map();
+
   constructor() { }
 
   get editor(): CodeEditor {
@@ -41,6 +46,10 @@ export class CodemirrorService {
       SpringProfileComponent.DisplayPropertyPathOrFind = true; // circular dependency
     });
 
+    this._mergeEditor.on('update', (instance: any) => {
+      this.onScrollCodemirrorUpdate();
+    });
+
     switch (this._editor) {
       case CodeEditor.JSON: {
         this._content = JSON.stringify(data, null, 2);
@@ -53,7 +62,7 @@ export class CodemirrorService {
   }
   showEditor(): void {
     this._mergeEditor.setValue(this._content);
-    this._mergeEditor.setSize('100%', '100%');
+    this._mergeEditor.setSize('100%', '400');
     this._mergeEditor.refresh();
   }
 
@@ -69,38 +78,52 @@ export class CodemirrorService {
   }
 
   updateCodeMirrorVisual(profileData: ProfileDataTO[], propertyList: any[], jsonObject: any): void {
+    this._lineToDivMapper = new Map();
+
+    this._propertyList = propertyList;
+    this._profileData = profileData;
+
+    const profileMapper = new Map();
+
+    this.lineToPropertyBreadcrumbMap = new Map();
+    this.propertyTolineBreadcrumbMap = new Map();
+    this._breadcrumbEditorLine = -1;
+
+    switch (this._editor) {
+      case CodeEditor.JSON: {
+        this.currentLineInEditor = JSON_PARSER.INITIAL_LINE;
+        this.jsonLineReader('', jsonObject, profileMapper, JSON_PARSER);
+        break;
+      }
+      case CodeEditor.YAML: {
+        this.currentLineInEditor = YAML_PARSER.INITIAL_LINE;
+        this.yamlLineReaderInObject('', jsonObject, profileMapper, YAML_PARSER);
+        break;
+      }
+    }
+    this._profileMapper = profileMapper;
+    this.onScrollCodemirrorUpdate();
+  }
+
+  private onScrollCodemirrorUpdate(): void {
 
     const parent = document.getElementById('display-aggregate');
     const lineElements = parent?.getElementsByClassName('CodeMirror-linenumber CodeMirror-gutter-elt');
     if (lineElements) {
 
-      const profileMapper = new Map();
-
-      this.lineToPropertyBreadcrumbMap = new Map();
-      this.propertyTolineBreadcrumbMap = new Map();
-      this._breadcrumbEditorLine = -1;
-
-      switch (this._editor) {
-        case CodeEditor.JSON: {
-          this.currentLineInEditor = JSON_PARSER.INITIAL_LINE;
-          this.jsonLineReader('', jsonObject, profileMapper, JSON_PARSER);
-          break;
-        }
-        case CodeEditor.YAML: {
-          this.currentLineInEditor = YAML_PARSER.INITIAL_LINE;
-          this.yamlLineReaderInObject('', jsonObject, profileMapper, YAML_PARSER);
-          break;
-        }
+      for (let i = 0; i < lineElements.length; ++i) {
+        const div: any = lineElements[i];
+        this._lineToDivMapper.set(div['innerText'], lineElements[i]);
       }
 
-      const profileColorMap = new Map(profileData.map((prof, index) => [prof.file.name, prof.color.color]));
+      const profileColorMap = new Map(this._profileData.map((prof, index) => [prof.file.name, prof.color.color]));
 
-      propertyList.forEach(prop => {
-        const lineNumber = profileMapper.get(prop.property);
-        this.updateColor(lineElements[lineNumber], profileColorMap.get(prop.owner));
+      this._propertyList.forEach(prop => {
+        const lineNumber = this._profileMapper.get(prop.property);
+        this.updateColor(this._lineToDivMapper.get(`${lineNumber}`), profileColorMap.get(prop.owner));
       });
 
-      profileData.forEach((profile, index) => {
+      this._profileData.forEach((profile, index) => {
         this.updateColor(document.getElementById(`side-bar-${index}`), profile.color.color);
       });
     }
