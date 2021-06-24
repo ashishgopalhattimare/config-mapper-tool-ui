@@ -13,6 +13,17 @@
       [labelCss]="'ml-2'" [leftIcon]="false" [buttonCss]="'mr-3'">
       </app-button>
 
+      <div class="dropdown mr-3">
+        <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+          {{editor}} Merger
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <button class="dropdown-item" (click)="changeEditor(editorType.name)" *ngFor="let editorType of editorTypeList">
+            {{editorType.title}}
+          </button>
+        </div>
+      </div>
+
       <div class="mr-3 border rounded pl-1 pr-1" fxLayout="column" fxLayoutAlign="start center">
         <div class="form-check">
           <input type="checkbox" style="height: 27px; width: 27px;" (change)="toggleEnableDrag()"
@@ -44,13 +55,13 @@
                     [style.background]="profileData.color.color">
                   </div>
 
-                  <div fxFlex="row" fxFlex="90" fxLayoutAlign="start center" class="profile-collapse"
+                  <div fxFlex="90" fxLayoutAlign="start center" class="profile-collapse"
                   (click)="updateYAML(profileData.file, 'profile-yaml-' + i, i)"
                   >
                     <div fxFlex="20" fxLayoutAlign="start center">
                       <img src="../../assets/yaml-profile.png" style="height: 45px;">
                     </div>
-                    <div fxFlex="60" fxLayoutAlign="start center">{{profileData.file.name}}</div>
+                    <div fxFlex="60" fxLayoutAlign="start center">{{profileData.name}}</div>
                     <div fxFlex="20" fxLayoutAlign="start center" fxHide.lt-sm>
                       {{profileData.file.size/1024 | number: '0.0-2'}} KB
                     </div>
@@ -81,7 +92,7 @@
 
     <mat-drawer-container>
       <mat-drawer #sideNav mode="side" opened="false" [position]="'end'">
-        <div fxLayout="column" fxLayoutAlign="end end" class="mb-5 pr-3 footer">
+        <div fxLayout="column" fxLayoutAlign="end end" class="pr-3 footer">
           <div class="sticky" *ngIf="getAggregatedContent() !== ''">
             <div *ngFor="let profileData of getProfiles(); index as ind" id="side-bar-{{ind}}"
                  style="width: 150px; word-break: break-all"
@@ -95,8 +106,12 @@
       <mat-drawer-content>
         <div fxLayout="row" fxLayoutAlign="start stretch">
           <div class="w-100">
-            <div class="footer w-100 mt-3 pr-3 pl-3" fxLayout="row" fxLayoutAlign="start start" *ngIf="getAggregatedContent() !== ''">
-              <div class="w-100 border bg-dark text-white hide-scroll" style="height: 40px; overflow-x:auto; overflow-y: hidden">
+            <div class="w-100 mt-3" fxLayout="row" fxLayoutAlign="start start" *ngIf="getAggregatedContent() !== ''">
+              <div class="w-100 border bg-dark text-white hide-scroll"
+                   [ngClass]="{
+                   'border-success': !displayPropertyPathOrFind && (breadcrumbValidObservable$ | async)
+                   }"
+                   style="height: 40px; overflow-x:auto; overflow-y: hidden">
                 <code *ngIf="displayPropertyPathOrFind else findPropertyTemplate" fxLayout="row" fxLayoutAlign="start center"
                      class="pl-2" style="height: 40px">
                   <div class="breadcrumb-box">
@@ -104,7 +119,7 @@
                     >{{ind > 0 ? '.' : ''}}<a class="link property-breadcrumb"
                                               (click)="updateEditorCursorPosition(ind)"
                                               style="text-decoration: none; cursor: pointer">{{property}}</a>
-                  </span>
+                    </span>
                   </div>
                 </code>
                 <ng-template #findPropertyTemplate>

@@ -1,10 +1,10 @@
-import { ProfileDataTO } from '../shared/models/ProfileDataTO';
-import { ProfileSpecTO } from '../shared/models/ProfileSpecTO';
-import { ProfileAggregatorService } from '../shared/profile-aggregator/profile-aggregator.service';
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import {ProfileDataTO} from '../shared/models/ProfileDataTO';
+import {ProfileSpecTO} from '../shared/models/ProfileSpecTO';
+import {ProfileAggregatorService} from '../shared/profile-aggregator/profile-aggregator.service';
+import {Component, OnInit, Renderer2} from '@angular/core';
 import * as CodeMirror from 'codemirror';
 import * as yaml from 'js-yaml';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 import 'codemirror/mode/yaml/yaml';
 import 'codemirror/lib/codemirror';
@@ -21,6 +21,8 @@ import {CodemirrorService} from '../shared/codemirror/codemirror.service';
 import {ColorProviderService} from '../shared/color-provider/color-provider.service';
 import {MatDrawer} from '@angular/material/sidenav';
 import {alertAnimation, dropAnimation, fileAnimation} from '../shared/animation/animation';
+import {CodeEditor} from '../shared/codemirror/codemirror.config';
+import {EditorType} from '../shared/models/EditorType';
 
 @Component({
   selector: 'app-spring-profile',
@@ -65,6 +67,11 @@ export class SpringProfileComponent implements OnInit {
   private profilesSet = new Set();
   private profiles: ProfileDataTO[] = [];
   private profileIndex = -1;
+
+  private _editorTypeList: EditorType[] = [
+    new EditorType('JSON', 'JSON'),
+    new EditorType('YAML', 'YAML (beta)'),
+  ]
 
   SUGGESTED_LIST: string[] = [];
 
@@ -250,6 +257,7 @@ export class SpringProfileComponent implements OnInit {
           JSON.parse(JSON.stringify(this.CODEMIRROR_CONFIG)),
           jsonObject
         );
+
         setTimeout(() => {
           this.codemirrorService.showEditor();
           setTimeout(() => {
@@ -266,5 +274,30 @@ export class SpringProfileComponent implements OnInit {
 
   highSuggestedText(text: string): void {
     this.codemirrorService.highlightPropertyInPropertyPath(text);
+  }
+
+  changeEditor(editorType: string): void {
+
+    switch (editorType) {
+      case CodeEditor.JSON.toString(): {
+        this.codemirrorService.editor = CodeEditor.JSON;
+        break;
+      }
+      case CodeEditor.YAML.toString(): {
+        this.codemirrorService.editor = CodeEditor.YAML;
+        break;
+      }
+    }
+  }
+  get editor(): string {
+    return this.codemirrorService.editor;
+  }
+
+  get editorTypeList(): any {
+    return this._editorTypeList;
+  }
+
+  get breadcrumbValidObservable$(): any {
+    return this.codemirrorService.breadcrumbValidObservable;
   }
 }
