@@ -296,4 +296,8 @@ export class SpringProfileComponent implements OnInit {
   get editorTypeList(): any {
     return this._editorTypeList;
   }
+
+  get breadcrumbValidObservable$(): any {
+    return this.codemirrorService.breadcrumbValidObservable;
+  }
 }

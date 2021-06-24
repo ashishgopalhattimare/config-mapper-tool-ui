@@ -5,6 +5,7 @@ import {SpringProfileComponent} from '../../spring-profile/spring-profile.compon
 import {CodeEditor, CodemirrorReader, JSON_PARSER, YAML_PARSER} from './codemirror.config';
 
 import * as YAML_PRETTIER from 'yaml';
+import {BehaviorSubject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,11 @@ export class CodemirrorService {
   private _profileMapper: any = null;
   private _lineToDivMapper = new Map();
 
+  private _breadcrumbValidObservable$ = new BehaviorSubject<boolean>(false);
+  get breadcrumbValidObservable(): any {
+    return this._breadcrumbValidObservable$;
+  }
+
   constructor() { }
 
   get editor(): CodeEditor {
@@ -36,7 +42,7 @@ export class CodemirrorService {
 
   mergeEditorConstruct(codemirrorTextArea: any, configuration: any, data: any): void {
 
-    configuration.foldGutter = false;
+    // configuration.foldGutter = false;
     configuration.readOnly = true;
 
     this._mergeEditor = CodeMirror.fromTextArea(codemirrorTextArea, configuration);
@@ -202,10 +208,12 @@ export class CodemirrorService {
 
   private highlightPropertyInCursorLine(cursorPos: number): void {
     if (cursorPos !== null) {
+      this._breadcrumbValidObservable$.next(false);
       this._mergeEditor.setCursor(cursorPos - 1, 0);
     }
 
     const startLastIndex = this.getPropertyStartEndIndex(this._mergeEditor.getLine(cursorPos - 1));
+    this._breadcrumbValidObservable$.next(true);
     this._mergeEditor.setSelection(
       {line: cursorPos - 1, ch: startLastIndex[0]},
       {line: cursorPos - 1, ch: startLastIndex[1]}
