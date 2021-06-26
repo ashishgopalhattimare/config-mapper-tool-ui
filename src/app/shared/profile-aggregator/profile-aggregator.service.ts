@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { ProfileSpecTO } from './../models/ProfileSpecTO';
+import { ProfileSpecTO } from '../models/ProfileSpecTO';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import * as yaml from 'js-yaml';
@@ -17,13 +17,6 @@ export class ProfileAggregatorService {
 
   aggregateProfile(profileSpecList: ProfileSpecTO[]): Observable<ProfileSpecTO | any> {
     return of(this.mergeProfileDataList(profileSpecList));
-  }
-
-  sortJsonRequest(request: any): Observable<any> {
-    return this.http.post<any>(
-      this.BASEURL + '/sort-json',
-      request
-    );
   }
 
   mergeProfileDataList(profileSpecList: ProfileSpecTO[]): ProfileSpecTO {

@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as yaml from 'js-yaml';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class YamlService {
 
   private profileErrorMessage = new Map();

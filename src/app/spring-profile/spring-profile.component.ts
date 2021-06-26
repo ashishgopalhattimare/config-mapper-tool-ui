@@ -29,7 +29,12 @@ import {Router} from '@angular/router';
   selector: 'app-spring-profile',
   templateUrl: './spring-profile.component.html',
   styleUrls: ['./spring-profile.component.scss'],
-  animations: [alertAnimation, fileAnimation, dropAnimation]
+  animations: [alertAnimation, fileAnimation, dropAnimation],
+  providers: [
+    ColorProviderService,
+    CodemirrorService,
+    YamlService
+  ]
 })
 export class SpringProfileComponent implements OnInit {
 

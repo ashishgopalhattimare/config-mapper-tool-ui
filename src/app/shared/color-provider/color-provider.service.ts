@@ -3,9 +3,7 @@ import {Color} from '../models/Color';
 import {PROFILE_COLORS} from '../SHARED_CONSTANTS';
 import {DoublyLinkedList} from '../models/DoublyLinkedList';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ColorProviderService {
 
   private colorList: DoublyLinkedList<Color> = new DoublyLinkedList<Color>();

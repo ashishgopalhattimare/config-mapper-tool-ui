@@ -7,9 +7,7 @@ import {CodeEditor, CodemirrorReader, JSON_PARSER, YAML_PARSER} from './codemirr
 import * as YAML_PRETTIER from 'yaml';
 import {BehaviorSubject} from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class CodemirrorService {
 
   private lineToPropertyBreadcrumbMap: any;
