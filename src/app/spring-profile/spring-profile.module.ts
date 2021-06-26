@@ -11,24 +11,30 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import {MatSidenavModule} from '@angular/material/sidenav';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {RouterModule, Routes} from '@angular/router';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: SpringProfileComponent
+  }
+];
 
 @NgModule({
   declarations: [SpringProfileComponent],
   imports: [
-    NgbModule,
     CommonModule,
+    RouterModule.forChild(routes),
+    NgbModule,
     FlexLayoutModule,
     MatDividerModule,
     MatIconModule,
     SharedModule,
     CodemirrorModule,
     DragDropModule,
-    // ColorPickerModule,
     MatCheckboxModule,
     AutocompleteLibModule,
-    MatSidenavModule,
-    BrowserAnimationsModule
+    MatSidenavModule
   ],
   exports: [SpringProfileComponent]
 })

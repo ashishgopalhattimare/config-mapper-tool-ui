@@ -1,0 +1,17 @@
+.emoji-icon {
+  font-size: 30px;
+  opacity: 0.5;
+  &:hover {
+    font-size: 35px;
+    cursor: pointer;
+    opacity: 1;
+  }
+}
+.emoji-selected {
+  font-size: 35px;
+  opacity: 1;
+}
+
+.text-size {
+  font-size: 18px;
+}

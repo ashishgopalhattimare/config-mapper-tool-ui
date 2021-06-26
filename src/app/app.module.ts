@@ -1,28 +1,42 @@
 import { HttpClientModule } from '@angular/common/http';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
-
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { SpringProfileModule } from './spring-profile/spring-profile.module';
+import {RouterModule, Routes} from '@angular/router';
+import {CommonModule} from '@angular/common';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
+const routes: Routes = [
+  {
+    path: 'home',
+    loadChildren: () => import('./spring-profile/spring-profile.module').then(m => m.SpringProfileModule)
+  },
+  {
+    path: 'feedback',
+    loadChildren: () => import('./feedback/feedback.module').then(m => m.FeedbackModule)
+  },
+  {
+    path: '**', redirectTo: 'home', pathMatch: 'full'
+  }
+];
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
+    BrowserAnimationsModule,
     BrowserModule,
-    AppRoutingModule,
-    FlexLayoutModule,
+    CommonModule,
     HttpClientModule,
-    SpringProfileModule,
-    DragDropModule
+    RouterModule.forRoot(routes),
+    FlexLayoutModule
   ],
+  exports: [RouterModule],
   providers: [],
   bootstrap: [AppComponent]
 })
