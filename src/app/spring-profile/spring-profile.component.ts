@@ -23,6 +23,7 @@ import {MatDrawer} from '@angular/material/sidenav';
 import {alertAnimation, dropAnimation, fileAnimation} from '../shared/animation/animation';
 import {CodeEditor} from '../shared/codemirror/codemirror.config';
 import {EditorType} from '../shared/models/EditorType';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-spring-profile',
@@ -35,6 +36,7 @@ export class SpringProfileComponent implements OnInit {
   constructor(private renderer: Renderer2, private profileAggregateService: ProfileAggregatorService,
               private yamlFileService: YamlService,
               private codemirrorService: CodemirrorService,
+              private router: Router,
               private colorProviderService: ColorProviderService) {
     this.SPACE_REPLACE = ' '.repeat(this.SPACES_TO_ONE_TAB);
   }
@@ -299,5 +301,9 @@ export class SpringProfileComponent implements OnInit {
 
   get breadcrumbValidObservable$(): any {
     return this.codemirrorService.breadcrumbValidObservable;
+  }
+
+  openFeedbackPage(): void {
+    this.router.navigateByUrl('feedback');
   }
 }

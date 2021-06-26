@@ -25,9 +25,14 @@
                 [(ngModel)]="feedbackText"></textarea>
     </div>
 
-    <button class="btn btn-outline-dark mt-3" (click)="submitForm()"
-            [disabled]="!this.selectedEmoji && !this.feedbackText">
-      Submit
-    </button>
+    <div fxLayout="row" class="mt-3">
+      <app-button [label]="'Back'" [image]="'navigate_before'"
+                  [labelCss]="'mr-2'" [buttonCss]="'mr-3'" (clicked)="openHomePage()">
+      </app-button>
+      <app-button [label]="'Submit'" [image]="'send'" [leftIcon]="false"
+                  [disable]="!this.selectedEmoji && !this.feedbackText"
+                  [labelCss]="'ml-2'" (clicked)="submitForm()">
+      </app-button>
+    </div>
   </div>
 </div>

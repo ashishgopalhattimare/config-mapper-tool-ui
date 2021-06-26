@@ -15,6 +15,7 @@ export class ButtonComponent implements OnInit {
   @Input() image = '';
   @Input() buttonCss = '';
   @Input() align = 'start center';
+  @Input() disable = false;
 
   constructor() { }
 

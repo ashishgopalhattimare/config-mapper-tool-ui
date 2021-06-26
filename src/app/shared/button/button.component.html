@@ -1,4 +1,5 @@
-<button  class="btn btn-outline-dark" [class]="buttonCss" (click)="callBackHandler()">
+<button  class="btn btn-outline-dark" [class]="buttonCss" (click)="callBackHandler()"
+         [disabled]="disable">
   <div fxLayout="row" [fxLayoutAlign]="align">
     <span *ngIf="leftIcon" class="material-icons" style="font-size: 23px"
     [class]="labelCss"

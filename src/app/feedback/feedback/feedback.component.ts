@@ -44,4 +44,8 @@ export class FeedbackComponent implements OnInit {
       this.router.navigateByUrl('');
     }
   }
+
+  openHomePage(): void {
+    this.router.navigateByUrl('home');
+  }
 }

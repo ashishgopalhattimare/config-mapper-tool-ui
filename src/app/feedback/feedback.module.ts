@@ -5,6 +5,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FeedbackService} from './feedback/feedback-service/feedback.service';
 import {FormsModule} from '@angular/forms';
+import {SharedModule} from '../shared/shared.module';
 
 const routes: Routes = [
   {
@@ -19,7 +20,8 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     FlexLayoutModule,
-    FormsModule
+    FormsModule,
+    SharedModule
   ],
   providers: [
     FeedbackService
