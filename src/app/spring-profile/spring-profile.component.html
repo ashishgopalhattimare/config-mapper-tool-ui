@@ -92,7 +92,7 @@
 
     <mat-drawer-container>
       <mat-drawer #sideNav mode="side" opened="false" [position]="'end'">
-        <div fxLayout="column" fxLayoutAlign="end end" class="pr-3 footer">
+        <div fxLayout="column" fxLayoutAlign="end end" class="pr-3 pb-2 footer">
           <div class="sticky" *ngIf="getAggregatedContent() !== ''">
             <div *ngFor="let profileData of getProfiles(); index as ind" id="side-bar-{{ind}}"
                  style="width: 150px; word-break: break-all"
@@ -152,7 +152,7 @@
                 <span class="material-icons">apps</span>
               </button>
             </div>
-            <div class="aggregate-display w-100 bg-white mb-4">
+            <div class="aggregate-display w-100 bg-white">
               <div class="pt-3" *ngIf="getAggregatedContent() !== ''"></div>
               <div fxLayoutAlign="start stretch" id="display-aggregate" class="border rounded"
                    [hidden]="getAggregatedContent() === ''">
